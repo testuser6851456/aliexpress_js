@@ -32,6 +32,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 empty = cartWrapper.querySelector('.empty');
 
             trigger.remove();
+            showConfirm();
+            calcGoods(1);
 
             removeBtn.classList.add('goods__item-remove');
             removeBtn.innerHTML = '&times';
@@ -41,8 +43,73 @@ window.addEventListener('DOMContentLoaded', () => {
             if (empty) {
                 empty.remove();
             }
+            calcTotal();
+            removeFromCart(removeBtn);
         });
     });
+
+    function sliceTitle() {
+
+        titles.forEach(function (item) {
+            if (item.textContent.length < 70) {
+                return;
+            } else {
+                const str = item.textContent.slice(0, 71) + '...';
+                //const str = `${item.textContent.slice(0, 71)}...`;
+                item.textContent = str;
+            }
+        });
+    }
+
+    sliceTitle();
+
+    function showConfirm() {
+        confirm.style.display = 'block';
+        let counter = 100;
+        const id = setInterval(frame, 10);
+
+        function frame() {
+            if (counter == 10) {
+                clearInterval(id);
+                confirm.style.display = 'none';
+            } else {
+                counter--;
+                confirm.style.transform = `translateY(-${counter}px)`;
+                confirm.style.opacity = '.' + counter;
+            }
+        }
+    }
+
+    function calcGoods(i) {
+        const items = cartWrapper.querySelectorAll('.goods__item');
+        badge.textContent = i + items.length;
+    }
+
+    function calcTotal() {
+        const prices = document.querySelectorAll('.cart__wrapper > .goods__item > .goods__price > span');
+        let total = 0;
+        prices.forEach(function (item) {
+            total += +item.textContent;
+        });
+        totalCost.textContent = total;
+    }
+
+    function removeFromCart(removeBtn) {
+        const emptyDiv = document.createElement('div');
+        removeBtn.addEventListener('click', () => {
+            removeBtn.parentElement.remove();
+            calcGoods(0);
+            calcTotal();
+            const goods = cartWrapper.querySelector('.goods__item');
+            console.log(goods);
+            if (goods == null) {
+                let empty = cartWrapper.appendChild(emptyDiv);
+                empty.classList.add('empty');
+                empty.textContent = 'Ваша корзина пока пуста';
+            }
+        });
+    }
+
 });
 
 
