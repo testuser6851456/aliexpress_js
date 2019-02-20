@@ -101,7 +101,6 @@ window.addEventListener('DOMContentLoaded', () => {
             calcGoods(0);
             calcTotal();
             const goods = cartWrapper.querySelector('.goods__item');
-            console.log(goods);
             if (goods == null) {
                 let empty = cartWrapper.appendChild(emptyDiv);
                 empty.classList.add('empty');
